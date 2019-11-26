@@ -8,4 +8,3 @@ if __name__ == '__main__':
     print('Hello, aardappel!')
     # prints hello aardappel
     print('Hello, schnitzel!')
-
