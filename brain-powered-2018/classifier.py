@@ -21,8 +21,9 @@ from scipy.fftpack import fft
 
  
 data = np.load('Klaas.npy',allow_pickle=True).T
-
+print(data.shape)
 channels = data[:2]
+print(channels.shape)
 
 pre_cue_time = round(0.1*256)
 
@@ -42,6 +43,7 @@ p_list = []
 
 l = 0
 # for g in range(6):/
+exit()
 for j in range(6):
 	for k in range(6):
 		total = 0
