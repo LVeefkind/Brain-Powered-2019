@@ -1,1 +1,2 @@
-import preprocessor.dataSampleGenerator
+from preprocessor.dataSampleGenerator import DataSampleGenerator
+from preprocessor.featureGenerator import FeatureGenerator

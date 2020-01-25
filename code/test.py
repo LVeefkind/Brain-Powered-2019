@@ -1,20 +1,53 @@
-import preprocessor
+from preprocessor import DataSampleGenerator
+from preprocessor import FeatureGenerator
 from scipy.io import loadmat
 
-print(preprocessor.dataSampleGenerator.dataSampleGenerator)
+# ~~~~ SAMPLE CODE ~~~~
 
 # Hz
 offset = 0
 # Hz
 samplingRate = 256
 # seconds
-timeSegment = 3
+timeSegmentLen = 3
+# overlap
+overlap = 2
+# seconds
+labelSegmentLen = 4
+# Hz
+startCutoff = 0
+endCutoff = 0
 
-if __name__ == '__main__':
-    data = loadmat('data/BP_2019PP1.mat')['data'].T
-    eeg = data[:6,:]
-    labels = data[8:12,:]
-    
-    sampleGenerator = preprocessor.dataSampleGenerator.dataSampleGenerator(eeg, labels)
-    for sample, label in sampleGenerator:
-        print(sample.shape, label)
+# Get the data from the matlab file
+data = loadmat('data/BP_2019PP1.mat')['data'].T
+# EEG data in following format: 
+#   cols = samples, rows = channels
+eeg = data[:6,:]
+# Last 4 channels are the label channels
+labels = data[8:12,:]
+
+# Set up the sample generator:
+#   samplingRate    : The current data file has a sampling rate of 256 Hz
+#   timeSegmentLen  : We want to generate labeled samples of 3 seconds long
+#   overlap         : We want to overlap each sample for two seconds
+#   labelSegmentLen : The amount of seconds of data each corresponding to a label
+#   startCutoff     : Amount of samples to ignore at the start of each labelSegment
+#   endCutoff       : Amount of samples to ignore at the end of each labelSegment  
+sampleGenerator = DataSampleGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
+                                        labelSegmentLen, startCutoff, endCutoff)
+
+# Now we can simply loop over each generated sample + label
+# for sample, label in sampleGenerator:
+#     print(sample.shape, label)
+
+featureGenerator = FeatureGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
+                                    labelSegmentLen, startCutoff, endCutoff)
+
+print('Features:')
+print(type(featureGenerator))
+print(featureGenerator.__iter__())
+print(featureGenerator.test())
+
+for (feature, label), i in featureGenerator:
+    print(feature.shape, label, i)
+

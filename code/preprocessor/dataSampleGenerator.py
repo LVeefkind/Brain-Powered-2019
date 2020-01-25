@@ -1,14 +1,24 @@
 import numpy as np
 
-class dataSampleGenerator():
+class DataSampleGenerator():
 
-    def __init__(self, eeg, labels):
+    def __init__(self, eeg, labels, samplingRate, timeSegmentLen,
+                 overlap, labelSegmentLen, startCutoff=0, endCutoff=0):
+        self.samplingRate = samplingRate
+        self.timeSegmentLen = timeSegmentLen
+        self.overlap = overlap
+        self.labelSegmentLen = labelSegmentLen
+        self.startCutoff = startCutoff
+        self.endCutoff = endCutoff
         labels = self.fix_labels(labels)
         self.eeg, self.labels = self.clean_data(eeg, labels)
 
 
     def __iter__(self):
-        return self.sample_generator(self.eeg, self.labels)
+        return self.sample_generator(self.eeg, self.labels, self.samplingRate,
+                                     self.timeSegmentLen, self.overlap,
+                                     self.labelSegmentLen, self.startCutoff,
+                                     self.endCutoff)
         
 
     def fix_labels(self, labels):
@@ -33,13 +43,14 @@ class dataSampleGenerator():
                 return data[:,i:], labels[:,i:]
 
 
-    def sample_generator(self, data, labels, samplingRate=256,
-                        timeSegment=3, overlap=2, labelSegmentLen=4,
-                        startCutoff=0, endCutoff=0):
+    def sample_generator(self, data, labels, samplingRate,
+                        timeSegment, overlap, labelSegmentLen,
+                        startCutoff, endCutoff):
         """
         Generates a sample of data with label.
         --> Parameters in seconds EXCEPT sampingRate and Cutoffs!!!
         """
+
         index = 0 + startCutoff
         index_end = index + samplingRate * labelSegmentLen -\
                     endCutoff - startCutoff
@@ -74,21 +85,4 @@ class dataSampleGenerator():
             #yield segment[:,index:endIndex]
             index += segmentJump * samplingRate
             endIndex += segmentJump * samplingRate
-
-
-if __name__ == '__main__':
-    data = loadmat('data/BP_2019PP1.mat')['data'].T
-    eeg = data[:6,:]
-    labels = data[8:12,:]
-
-    sampleGenerator = dataSampleGenerator(eeg, labels)
-    for sample, label in sampleGenerator:
-        print(sample.shape, label)
-
-    # labels = fix_labels(labels)
-    # eeg, labels = clean_data(eeg, labels)
-
-    # startTime = time()
-    # for sample, label in sample_generator(eeg, labels):
-    #     print(sample.shape, label)
-    # print(time() - startTime)
+            
