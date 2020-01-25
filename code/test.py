@@ -22,6 +22,7 @@ endCutoff = 0
 data = loadmat('data/BP_2019PP1.mat')['data'].T
 # EEG data in following format: 
 #   cols = samples, rows = channels
+#   channels 6 and 7 contain bad data, so we ignore those
 eeg = data[:6,:]
 # Last 4 channels are the label channels
 labels = data[8:12,:]
