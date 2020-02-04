@@ -38,15 +38,18 @@ sampleGenerator = DataSampleGenerator(eeg, labels, samplingRate, timeSegmentLen,
                                         labelSegmentLen, startCutoff, endCutoff)
 
 # Now we can simply loop over each generated sample + label
+
 for sample, label in sampleGenerator:
     print(sample.shape, label)
+    break
 
 # FeatureGenerator is a child of SampleGenerator. 
 # It allows for the same parameters to generate samples,
 # but allows for more specific alterations to samples such as ICA.
 featureGenerator = FeatureGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
-                                    labelSegmentLen, startCutoff, endCutoff)
+                                    labelSegmentLen, startCutoff, endCutoff, ["ica", "fourier"])
 
-for feature, labelin featureGenerator:
+for feature, label in featureGenerator:
     print(feature.shape, label)
+    break
 
