@@ -35,6 +35,8 @@ class FeatureGenerator(DataSampleGenerator):
         freqs = np.fft.fftfreq(feature[0].size, time_step)
         idx = np.argsort(freqs)
         # Plotting test
+        high = np.argmax(ps)
+        print(freqs[high])
         plt.plot(freqs[idx], ps[idx])
         plt.show()
         return feature

@@ -47,7 +47,7 @@ for sample, label in sampleGenerator:
 # It allows for the same parameters to generate samples,
 # but allows for more specific alterations to samples such as ICA.
 featureGenerator = FeatureGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
-                                    labelSegmentLen, startCutoff, endCutoff, ["ica", "fourier"])
+                                    labelSegmentLen, startCutoff, endCutoff, ["fourier"])
 
 for feature, label in featureGenerator:
     print(feature.shape, label)
