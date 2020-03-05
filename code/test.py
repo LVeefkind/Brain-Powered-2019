@@ -2,6 +2,9 @@ from preprocessor import DataSampleGenerator
 from preprocessor import FeatureGenerator
 from scipy.io import loadmat
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 # ~~~~ SAMPLE CODE ~~~~
 
 # Hz
@@ -13,7 +16,7 @@ timeSegmentLen = 3
 # overlap
 overlap = 2
 # seconds
-labelSegmentLen = 4
+labelSegmentLen = 10
 # Hz
 startCutoff = 0
 endCutoff = 0
@@ -34,14 +37,14 @@ labels = data[8:12,:]
 #   labelSegmentLen : The amount of seconds of data each corresponding to a label
 #   startCutoff     : Amount of samples to ignore at the start of each labelSegment
 #   endCutoff       : Amount of samples to ignore at the end of each labelSegment  
-sampleGenerator = DataSampleGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
-                                        labelSegmentLen, startCutoff, endCutoff)
+# sampleGenerator = DataSampleGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
+#                                         labelSegmentLen, startCutoff, endCutoff)
 
-# Now we can simply loop over each generated sample + label
+# # Now we can simply loop over each generated sample + label
 
-for sample, label in sampleGenerator:
-    print(sample.shape, label)
-    break
+# for sample, label in sampleGenerator:
+#     print(sample.shape, label)
+#     break
 
 # FeatureGenerator is a child of SampleGenerator. 
 # It allows for the same parameters to generate samples,
@@ -49,7 +52,8 @@ for sample, label in sampleGenerator:
 featureGenerator = FeatureGenerator(eeg, labels, samplingRate, timeSegmentLen, overlap,
                                     labelSegmentLen, startCutoff, endCutoff, ["fourier"])
 
+xf = np.arange(0,samplingRate, samplingRate/100)
 for feature, label in featureGenerator:
-    print(feature.shape, label)
+    print(feature)
     break
 

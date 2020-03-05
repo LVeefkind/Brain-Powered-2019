@@ -85,4 +85,3 @@ class DataSampleGenerator():
             #yield segment[:,index:endIndex]
             index += segmentJump * samplingRate
             endIndex += segmentJump * samplingRate
-            
